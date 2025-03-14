@@ -18,7 +18,9 @@ This guide is to help people start with setting up the ESP-C6 integrated to the 
 13. Select Build project -> Flash Device -> Monitor Device
 
 If you have completed all the steps above, you finish the first step of setting up your ESP32-C6
-15. After the ESP-IDF Monitor shows up, type Help and the list of commands will show up: 
+After the ESP-IDF Monitor shows up, type Help and the list of commands will show up (Check the first reference for more information)
+
+First step to test UDP communication by sending UDP package via OT CLI
 
 
 
