@@ -20,7 +20,10 @@ This guide is to help people start with setting up the ESP-C6 integrated to the 
 If you have completed all the steps above, you finish the first step of setting up your ESP32-C6
 After the ESP-IDF Monitor shows up, type Help and the list of commands will show up (Check the first reference for more information)
 
-First step is to connect Thread network, in this case I already had my Thread Border Router setup so I would advise to go straight to OpenThread website about how to form a Thread network with Thread Border Router. (Second reference for more information). 
+First step is to connect Thread network, in this case I already had my Thread Border Router setup so I would advise to go straight to OpenThread website about how to form a Thread network with Thread Border Router. (Second reference for more information).       
+
+I got the networkkey, pskc and dataset from the Thread Border Router (furthere instruction in OpenThread website)
+
 Then you go to OT CLI via the Device Monitor in ESP-IDF and start to connect ESP-C6 to Thread network:
 
 For networkkey connection:
@@ -28,23 +31,58 @@ For networkkey connection:
 2. Type "dataset commit active"
 3. Type "ifconfig up"
 4. Type "thread start" then it should show up like this:
-I(23058) OPENTHREAD:[N] Mle-----------: Role disabled -> detached
-Done
-> I(23408) OPENTHREAD:[N] Mle-----------: Attach attempt 1, AnyPartition reattaching with Active Dataset
-I(30028) OPENTHREAD:[N] Mle-----------: Attach attempt 1 unsuccessful, will try again in 0.288 seconds
-I(30328) OPENTHREAD:[N] Mle-----------: Attach attempt 2, AnyPartition 
-I(33498) OPENTHREAD:[N] Mle-----------: Delay processing Announce - channel 21, panid 0x1444
-I(33758) OPENTHREAD:[N] Mle-----------: Processing Announce - channel 21, panid 0x1444
-I(33758) OPENTHREAD:[N] Mle-----------: Role detached -> disabled
-I(33758) OPENTHREAD:[N] Mle-----------: Role disabled -> detached
-I(34178) OPENTHREAD:[N] Mle-----------: Attach attempt 1, AnyPartition 
-I(35068) OPENTHREAD:[N] Mle-----------: RLOC16 fffe -> 2c01
-I(35068) OPENTHREAD:[N] Mle-----------: Role detached -> child
 
-5. After a moment, check the device state. It should be the Child:
+> I(23058) OPENTHREAD:[N] Mle-----------: Role disabled -> detached
+
+> Done
+
+> I(23408) OPENTHREAD:[N] Mle-----------: Attach attempt 1, AnyPartition reattaching with Active Dataset
+
+> I(30028) OPENTHREAD:[N] Mle-----------: Attach attempt 1 unsuccessful, will try again in 0.288 seconds
+
+> I(30328) OPENTHREAD:[N] Mle-----------: Attach attempt 2, AnyPartition 
+
+> I(33498) OPENTHREAD:[N] Mle-----------: Delay processing Announce - channel 21, panid 0x1444
+
+> I(33758) OPENTHREAD:[N] Mle-----------: Processing Announce - channel 21, panid 0x1444
+
+> I(33758) OPENTHREAD:[N] Mle-----------: Role detached -> disabled
+
+> I(33758) OPENTHREAD:[N] Mle-----------: Role disabled -> detached
+
+> I(34178) OPENTHREAD:[N] Mle-----------: Attach attempt 1, AnyPartition 
+
+> I(35068) OPENTHREAD:[N] Mle-----------: RLOC16 fffe -> 2c01
+
+> I(35068) OPENTHREAD:[N] Mle-----------: Role detached -> child
+
+6. After a moment, check the device state. It should be the Child:
 > state
-child
-Done
+
+> child
+
+> Done
+
+7. Set the state to Router by typing "state router"
+8. Sucessfully connect the ESP to the Thread network
+
+
+
+For secure commissoning: 
+1. Type "pskc 54e7f18d2575014da94db09df29c5df0" (change it according to your PSKc)
+2. Type "dataset panid 0x1444" (change it according to your panid)
+3. The rest of the steps are the same with the networkkey connection
+
+I got the networkkey, pskc and dataset from the Thread Border Router (furthere instruction in OpenThread website)
+
+Next step is to send UDP packages via CLI to the UDP listener/server on my laptop.
+1. Create the UDP server on your laptop
+2. Find the IP addresses of the laptop (either IPv6 or IPv4 addresses)
+3. Type: udp open -> udp send fdde:ad00:beef:0:bb1:ebd6:ad10:f33 1234 hello   (Thread is based on IPv6 communication but thanks to NAT64 prefix, IPv4 addresses will be automatically converted to IPv6 addresses so we could save it later for the project)
+4. Then it will show up "hello" on the UDP listener on your VSCode.
+
+
+   
 
 
 
