@@ -20,7 +20,32 @@ This guide is to help people start with setting up the ESP-C6 integrated to the 
 If you have completed all the steps above, you finish the first step of setting up your ESP32-C6
 After the ESP-IDF Monitor shows up, type Help and the list of commands will show up (Check the first reference for more information)
 
-First step to test UDP communication by sending UDP package via OT CLI
+First step is to connect Thread network, in this case I already had my Thread Border Router setup so I would advise to go straight to OpenThread website about how to form a Thread network with Thread Border Router. (Second reference for more information). 
+Then you go to OT CLI via the Device Monitor in ESP-IDF and start to connect ESP-C6 to Thread network:
+
+For networkkey connection:
+1. Type "dataset networkkey 731ab6a60a64a0a0b14b259b86b2be01"  (change it according to your networkkey)
+2. Type "dataset commit active"
+3. Type "ifconfig up"
+4. Type "thread start" then it should show up like this:
+I(23058) OPENTHREAD:[N] Mle-----------: Role disabled -> detached
+Done
+> I(23408) OPENTHREAD:[N] Mle-----------: Attach attempt 1, AnyPartition reattaching with Active Dataset
+I(30028) OPENTHREAD:[N] Mle-----------: Attach attempt 1 unsuccessful, will try again in 0.288 seconds
+I(30328) OPENTHREAD:[N] Mle-----------: Attach attempt 2, AnyPartition 
+I(33498) OPENTHREAD:[N] Mle-----------: Delay processing Announce - channel 21, panid 0x1444
+I(33758) OPENTHREAD:[N] Mle-----------: Processing Announce - channel 21, panid 0x1444
+I(33758) OPENTHREAD:[N] Mle-----------: Role detached -> disabled
+I(33758) OPENTHREAD:[N] Mle-----------: Role disabled -> detached
+I(34178) OPENTHREAD:[N] Mle-----------: Attach attempt 1, AnyPartition 
+I(35068) OPENTHREAD:[N] Mle-----------: RLOC16 fffe -> 2c01
+I(35068) OPENTHREAD:[N] Mle-----------: Role detached -> child
+
+5. After a moment, check the device state. It should be the Child:
+> state
+child
+Done
+
 
 
 
@@ -31,4 +56,8 @@ First step to test UDP communication by sending UDP package via OT CLI
 
 
 References: 
-https://github.com/openthread/openthread/blob/main/src/cli/README.md
+https://github.com/openthread/openthread/blob/main/src/cli/README.md 
+
+https://openthread.io/codelabs/esp-openthread-hardware#4
+
+https://github.com/openthread/openthread/blob/main/src/cli/README_UDP.md
