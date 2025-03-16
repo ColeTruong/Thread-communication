@@ -56,7 +56,8 @@ For networkkey connection:
 
 > I(35068) OPENTHREAD:[N] Mle-----------: Role detached -> child
 
-6. After a moment, check the device state. It should be the Child:
+6. After a moment, type "state" check the device state. It should be the Child:
+
 > state
 
 > child
