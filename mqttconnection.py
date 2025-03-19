@@ -4,7 +4,7 @@ import paho.mqtt.client as mqtt
 import socket
 
 # Define the UDP IP and port
-UDP_IP = "192.168.0.185"
+UDP_IP = "**************"
 UDP_PORT = 12345
 
 
@@ -28,7 +28,7 @@ unacked_publish = set()
 mqttc = mqtt.Client()
 
 # Set credentials for broker
-mqttc.username_pw_set("homeassistant", "ahvaotee2Xofeizahch1Kaeshashae3leiph1iro4ZevohF9la9Aifaeji5ohbae")
+mqttc.username_pw_set("username", "password")        # Set the username and password of your MQTT broker
 
 # Assign callback for publish
 mqttc.on_publish = on_publish
