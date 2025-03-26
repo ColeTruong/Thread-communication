@@ -100,6 +100,7 @@ In this case, I combined the MQTT client with the UDP listener in the same code.
 
 
 References: 
+
 https://github.com/openthread/openthread/blob/main/src/cli/README.md 
 
 https://openthread.io/codelabs/esp-openthread-hardware#4
