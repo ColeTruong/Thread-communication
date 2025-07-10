@@ -91,9 +91,7 @@ Next step is to send UDP packages via CLI to the UDP listener/server on my lapto
 3. Type: udp open -> udp send fdde:ad00:beef:0:bb1:ebd6:ad10:f33 1234 hello   (Thread is based on IPv6 communication but thanks to NAT64 prefix, IPv4 addresses will be automatically converted to IPv6 addresses so we could save it later for the project)
 4. Then it will show up "hello" on the UDP listener on your VSCode.
 
-Next step is to create a MQTT client to catch the UDP packages and forward them to the MQTT broker. 
 
-In this case, I combined the MQTT client with the UDP listener in the same code.
 
 
 
