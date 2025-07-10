@@ -1,5 +1,14 @@
 # Thread-communication
 
+This repository contains an OpenThread UDP communication example based on the OpenThread CLI example from ESP-IDF. The device is expected to send data via UDP to IPv6 address of the Thread BR.
+
+Requirements:
+- ESP32-C6
+- Micro-USB cable
+- ESP-IDF v5.3.1 at least
+
+
+
 Setup
 
 This guide is to help people start with setting up the ESP-C6 integrated to the existing thread network.  
