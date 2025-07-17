@@ -250,6 +250,8 @@ exit:
     vTaskDelete(NULL);
 }
 
+// BLE GAP callback function to process scan results
+
 static void gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param)
 {
     if (event == ESP_GAP_BLE_SCAN_RESULT_EVT) {
@@ -284,6 +286,9 @@ static void gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param)
         }
     }
 }
+
+
+
 
 static void ble_scanner_task(void *arg)
 {
