@@ -63,7 +63,6 @@
 #include "nvs_flash.h"
 
 
-
 #define BLE_TAG "BLE_SCANNER"   // Define name of BLE scanner to debugging logs
 #define MANUFACTURER_ID 0xFFFF  // Replace with your actual UWB manufacturer ID if different
 
