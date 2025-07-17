@@ -91,6 +91,9 @@ Next step is to send UDP packages via CLI to the UDP listener/server on my lapto
 3. Type: udp open -> udp send fdde:ad00:beef:0:bb1:ebd6:ad10:f33 1234 hello   (Thread is based on IPv6 communication but thanks to NAT64 prefix, IPv4 addresses will be automatically converted to IPv6 addresses so we could save it later for the project)
 4. Then it will show up "hello" on the UDP listener on your VSCode.
 
+** Notes **
+
+Although the NAT64 prefix is available via the OpenThread CLI, the ESP-IDF networking stack currently supports only IPv6 for UDP communication. Consequently, it is not possible to send UDP messages directly to IPv4-only servers. Furthermore, due to the local topology of Wi-Fi networks, non-Thread devices (such as UDP servers on standard Wi-Fi) are typically unable to receive packets from Thread nodes over IPv6. This is because public Wi-Fi networks often support IPv6 communication only within the local link and do not provide proper routing or NAT64 translation for packets originating from Thread networks. As a result, while the code can successfully send UDP packets to other devices within the Thread network, it cannot deliver them to external IPv4-based servers.
 
 
 
