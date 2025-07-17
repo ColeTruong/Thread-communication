@@ -350,5 +350,4 @@ void app_main(void)
     xTaskCreate(ot_task_worker, "ot_cli_main", 10240, xTaskGetCurrentTaskHandle(), 5, NULL);
     xTaskCreate(udp_socket_client_task, "udp_client", 4096, &udp_client, 3, NULL);
     xTaskCreate(ble_scanner_task, "ble_scanner", 4096, NULL, 4, NULL);
-
 }
