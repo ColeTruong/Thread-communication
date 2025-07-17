@@ -12,9 +12,12 @@
  * CONDITIONS OF ANY KIND, either express or implied.
 */
 
+// Standard lirbaries in ESP-IDF
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+
+// Libraries needed for OpenThread inilitation
 
 #include "sdkconfig.h"
 #include "esp_err.h"
@@ -39,6 +42,7 @@
 #include "openthread/logging.h"
 #include "openthread/tasklet.h"
 
+// Libraries for OpenThread
 
 #include "esp_ot_udp_socket.h"
 #include "cc.h"
@@ -50,13 +54,17 @@
 #include "lwip/mld6.h"
 #include "lwip/sockets.h"
 
+// Libraries for BLE scanner
+
 #include "esp_bt.h"
 #include "esp_gap_ble_api.h"
 #include "esp_bt_main.h"
 #include "esp_bt_device.h"
 #include "nvs_flash.h"
 
-#define BLE_TAG "BLE_SCANNER"
+
+
+#define BLE_TAG "BLE_SCANNER"   // Define name of BLE scanner to debugging logs
 #define MANUFACTURER_ID 0xFFFF  // Replace with your actual UWB manufacturer ID if different
 
 extern UDP_CLIENT udp_client; // Access global from BLE task
@@ -71,6 +79,8 @@ extern UDP_CLIENT udp_client; // Access global from BLE task
 
 #define TAG "ot_esp_cli"
 
+// Function for UDP client with the message updated from BLE scanner
+
 static UDP_CLIENT udp_client = {
     .exist = 1,
     .sock = -1,
@@ -78,11 +88,12 @@ static UDP_CLIENT udp_client = {
     .local_ipaddr = "::",
     .ifr = {{0}},
     .messagesend = {
-        .port = 20617,
-        .ipaddr = "fd40:e3e2:5852:4d1:a433:cd2c:20c8:fb4b",
-        .message = "HelloFromESP32",
+        .port = 20617,                                            // Destination port address
+        .ipaddr = "fd40:e3e2:5852:4d1:a433:cd2c:20c8:fb4b",       // Destination IPv6 addresss
+        .message = "", 
     },
 };
+
 
 
 static esp_netif_t *init_openthread_netif(const esp_openthread_platform_config_t *config)
@@ -94,6 +105,8 @@ static esp_netif_t *init_openthread_netif(const esp_openthread_platform_config_t
 
     return netif;
 }
+
+// Function to initialise Thread network
 
 static void ot_task_worker(void *aContext)
 {
@@ -147,24 +160,34 @@ static void ot_task_worker(void *aContext)
     vTaskDelete(NULL);
 }
 
+// Function to send a UDP message using IPv6 address over a Thread network
+
 static void udp_client_send(UDP_CLIENT *udp_client_member)
 {
-    struct sockaddr_in6 dest_addr = {0};
-    int len = 0;
+    struct sockaddr_in6 dest_addr = {0};    // IPv6 destination address structure
+    int len = 0;                            // Length of the sent message
 
+    // Convert the destination IP address (string) to binary format
     inet6_aton(udp_client_member->messagesend.ipaddr, &dest_addr.sin6_addr);
-    dest_addr.sin6_family = AF_INET6;
-    dest_addr.sin6_port = htons(udp_client_member->messagesend.port);
+    dest_addr.sin6_family = AF_INET6;    // Set address family to IPv6
+    dest_addr.sin6_port = htons(udp_client_member->messagesend.port);    // Set destination port in network byte order
+    // Log the destination IP and port
     ESP_LOGI(OT_EXT_CLI_TAG, "Sending to %s : %d", udp_client_member->messagesend.ipaddr,
              udp_client_member->messagesend.port);
+    // Bind the socket to the specified network interface (Thread in this case)
     esp_err_t err = socket_bind_interface(udp_client_member->sock, &(udp_client_member->ifr));
+    // If the binding fails, return immediately and log the issue
     ESP_RETURN_ON_FALSE(err == ESP_OK, , OT_EXT_CLI_TAG, "Stop sending message");
+    // Send the message using sendto() to the destination address
     len = sendto(udp_client_member->sock, udp_client_member->messagesend.message,
                  strlen(udp_client_member->messagesend.message), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+    // Check if sending failed
     if (len < 0) {
         ESP_LOGW(OT_EXT_CLI_TAG, "Fail to send message");
     }
 }
+
+
 
 static void udp_socket_client_task(void *pvParameters)
 {
