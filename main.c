@@ -287,29 +287,34 @@ static void gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param)
     }
 }
 
-
-
+// BLE scanner task: initialises BLE stack and starts continuous scanning
 
 static void ble_scanner_task(void *arg)
 {
     esp_err_t ret;
 
+     // Initialise the Bluetooth controller with default configuration
     esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
     ret = esp_bt_controller_init(&bt_cfg);
-    ESP_ERROR_CHECK(ret);
+    ESP_ERROR_CHECK(ret);     // Halt if initialisation fails
 
+    // Enable the controller in BLE-only mode
     ret = esp_bt_controller_enable(ESP_BT_MODE_BLE);
-    ESP_ERROR_CHECK(ret);
+    ESP_ERROR_CHECK(ret);        // Halt if enabling fails
 
+    // Initialise the Bluedroid Bluetooth stack (required by ESP BLE APIs)
     ret = esp_bluedroid_init();
     ESP_ERROR_CHECK(ret);
 
+    // Enable the Bluedroid stack
     ret = esp_bluedroid_enable();
     ESP_ERROR_CHECK(ret);
 
+    // Register the BLE GAP event handler (our custom callback function)
     ret = esp_ble_gap_register_callback(gap_cb);
     ESP_ERROR_CHECK(ret);
 
+    // Configure BLE scanning parameters
     esp_ble_gap_set_scan_params_t scan_params = {
         .scan_type = BLE_SCAN_TYPE_ACTIVE,
         .own_addr_type = BLE_ADDR_TYPE_PUBLIC,
@@ -318,11 +323,14 @@ static void ble_scanner_task(void *arg)
         .scan_window = 0x30,
         .scan_duplicate = BLE_SCAN_DUPLICATE_DISABLE
     };
+    // Set the configured scan parameters
     ret = esp_ble_gap_set_scan_params(&scan_params);
     ESP_ERROR_CHECK(ret);
 
+    // Start BLE scanning indefinitely (duration = 0)
     esp_ble_gap_start_scanning(0); // Continuous scanning
 
+    // Delete this task since scanning is now handled by the registered callback
     vTaskDelete(NULL); // Let GAP callback do the work
 }
 
